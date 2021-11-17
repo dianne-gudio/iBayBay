@@ -43,7 +43,7 @@ public class OutputActivity extends AppCompatActivity {
         Python py = Python.getInstance();
 
         /*
-        Then, create Python object.
+        Then, create Python object. -----------TO BE EDITED, THIS IS JUST A SAMPLE----------
          */
         PyObject pyobj = py.getModule("script"); //Opens the Python file named "script.py" inside "python" folder
         PyObject obj = pyobj.callAttr("main"); //Calls the function named "main" inside "script.py"
