@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background_color"
+    tools:context=".OpenChartActivity">
+
+    <Button
+        android:id="@+id/backBtn"
+        android:layout_width="292dp"
+        android:layout_height="54dp"
+        android:layout_marginBottom="50dp"
+        android:background="@color/button_color"
+        android:text="@string/back_to_menu"
+        android:textColor="@color/buttonText_color"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+</android.support.constraint.ConstraintLayout>

@@ -1,0 +1,15 @@
+<resources>
+    <string name="app_name">Baybayin Character Recognition - CapsNet</string>
+
+    //Main Menu
+    <string name="button_capture">Capture Baybayin</string>
+    <string name="button_upload">Upload From Gallery</string>
+    <string name="button_show">Open Baybayin Chart</string>
+
+    //Baybayin Chart
+    <string name="back_to_menu">Back to Menu</string>
+
+    //Output Screen
+    <string name="outputLabelText">Output: </string>
+    <string name="doneBtn">Done</string>
+</resources>
