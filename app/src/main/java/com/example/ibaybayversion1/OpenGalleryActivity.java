@@ -3,26 +3,34 @@ package com.example.ibaybayversion1;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Base64;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.chaquo.python.PyObject;
+import com.chaquo.python.Python;
+import com.chaquo.python.android.AndroidPlatform;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
 public class OpenGalleryActivity extends AppCompatActivity {
     private TextView yourImageText;
-    private ImageView image;
+    private ImageView imagePreview;
     private Button selectBtn;
-    Bitmap img;
-    String encoded;
+
+    BitmapDrawable drawable;
+    Bitmap bitmap;
+    String encodedImage = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,7 +39,7 @@ public class OpenGalleryActivity extends AppCompatActivity {
 
         //Assign variables
         yourImageText = findViewById(R.id.yourImageText);
-        image = findViewById(R.id.selectedImage);
+        imagePreview = findViewById(R.id.selectedImage);
         selectBtn = (Button) findViewById(R.id.selectBtn);
 
         //"Select Image" Button
@@ -52,10 +60,10 @@ public class OpenGalleryActivity extends AppCompatActivity {
         if (requestCode == 100){
             //Get the image that is selected
             Uri uri = data.getData();
-            image.setImageURI(uri);
+            imagePreview.setImageURI(uri);
 
             try {
-                img = MediaStore.Images.Media.getBitmap(this.getContentResolver(), uri);
+                bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), uri);
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -65,40 +73,33 @@ public class OpenGalleryActivity extends AppCompatActivity {
             selectBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    connectPython();
+                    drawable = (BitmapDrawable)imagePreview.getDrawable();
+                    bitmap = drawable.getBitmap();
+                    encodedImage = getStringImage(bitmap);
+
+                    analyzeInput(encodedImage, uri);
                 }
             });
         }
         yourImageText.setVisibility(View.INVISIBLE); //Hides "Your captured image will show here." message
-
-        //Converts Bitmap image to base 64 string
-        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-        img.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
-        byte[] byteArray = byteArrayOutputStream .toByteArray();
-
-        encoded = Base64.encodeToString(byteArray, Base64.DEFAULT);
-
     }
 
-    public void connectPython(){
+    private String getStringImage(Bitmap bitmap) {
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);
 
-        /*
-        ---------------------EDIT HERE----------------------
+        // Convert image to an encoded Base64 String
+        byte[] imageBytes = baos.toByteArray();
+        return Base64.encodeToString(imageBytes, Base64.DEFAULT);
+    }
 
-        if (! Python.isStarted()) {
-            Python.start(new AndroidPlatform(this));
-        }
-
+    public void analyzeInput(String imageInput, Uri imgUri){
         Python py = Python.getInstance();
+        PyObject pyobj = py.getModule("baybay_caps_classify");
+        PyObject pred1 = pyobj.callAttr("get_prediction", imageInput);
 
-        PyObject pyobj = py.getModule("baybayin_cnn_classify"); //Python File
-        PyObject obj = pyobj.callAttr("get_data"); //Python def
-        List<PyObject> result = obj.callAttr("get_data", encoded).asList(); //Not sure if this is applicable sa app natin - kasi parang iba yung structure ng code nila Raymond
-
-        OutputActivity.outputImage.setImageBitmap(); //Displays the output image in app, still to be edited.
-        OutputActivity.outputResult.setText(obj.toString()); //Displays the output prediction to app, still to be edited.
-
-        */
+        GlobalVariables.classification = pred1.toString();
+        GlobalVariables.imageInput = imgUri;
 
         showOutput();
     }
