@@ -16,14 +16,20 @@ android {
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
-
         ndk {
-            abiFilters "armeabi-v7a", "x86"
+            abiFilters "armeabi-v7a", "arm64-v8a", "x86", "x86_64"
         }
 
         python {
-            buildPython "C:/Users/diann/AppData/Local/Programs/Python/Python39/python.exe"
+            buildPython "D:/Program Files/Python/python.exe"
+
+            pip {
+                install "opencv-python"
+                install "numpy"
+                install "tensorflow"
+            }
         }
+
         sourceSets {
             main {
                 python.srcDir "src/main/python"

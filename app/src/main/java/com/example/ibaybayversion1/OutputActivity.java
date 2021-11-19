@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.FileUtils;
 import android.provider.MediaStore;
+import android.provider.Settings;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -35,6 +36,10 @@ public class OutputActivity extends AppCompatActivity {
         doneBtn = (Button) findViewById(R.id.doneBtn);
         outputResult = (TextView) findViewById(R.id.outputResult);
         outputImage = findViewById(R.id.outputImage);
+
+        // Output
+        outputResult.setText(GlobalVariables.classification);
+        outputImage.setImageURI(GlobalVariables.imageInput);
 
         //"Done" Button
         doneBtn.setOnClickListener(new View.OnClickListener() {

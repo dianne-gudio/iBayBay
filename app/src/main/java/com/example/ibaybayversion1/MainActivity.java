@@ -1,11 +1,15 @@
 package com.example.ibaybayversion1;
 
 import android.content.Intent;
-import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
+
+import com.chaquo.python.PyObject;
+import com.chaquo.python.Python;
+import com.chaquo.python.android.AndroidPlatform;
 
 public class MainActivity extends AppCompatActivity {
     private Button captureBtn;
@@ -45,6 +49,12 @@ public class MainActivity extends AppCompatActivity {
                 openChart();
             }
         });
+
+        // PYTHON START
+
+        if(!Python.isStarted()){
+            Python.start(new AndroidPlatform(this));
+        }
     }
 
     public void openCamera(){
